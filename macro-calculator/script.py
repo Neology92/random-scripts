@@ -11,13 +11,13 @@ def cli():
 
 
 @cli.command()
-@click.option('-p', default=0, help='weight of protein in grams')
-@click.option('-f', default=0, help='weight of fat in grams')
-@click.option('-c', default=0, help='weight of carbs in grams')
-def energy_ratio(p, f, c):
-    protein_kcal = p * KCAL_PER_GRAM_PROTEIN
-    carbs_kcal = c * KCAL_PER_GRAM_CARBS
-    fat_kcal = f * KCAL_PER_GRAM_FAT
+@click.argument('protein', type=int)
+@click.argument('fat', type=int)
+@click.argument('carbs', type=int)
+def energy_ratio(protein, fat, carbs):
+    protein_kcal = protein * KCAL_PER_GRAM_PROTEIN
+    carbs_kcal = carbs * KCAL_PER_GRAM_CARBS
+    fat_kcal = fat * KCAL_PER_GRAM_FAT
 
     kcal_sum = protein_kcal + carbs_kcal + fat_kcal
     protein_percent = calc_percent(protein_kcal, kcal_sum)
