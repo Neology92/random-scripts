@@ -20,14 +20,15 @@ def energy_ratio(protein, fat, carbs):
     fat_kcal = fat * KCAL_PER_GRAM_FAT
 
     kcal_sum = protein_kcal + carbs_kcal + fat_kcal
+
     protein_percent = calc_percent(protein_kcal, kcal_sum)
     carbs_percent = calc_percent(carbs_kcal, kcal_sum)
     fat_percent = calc_percent(fat_kcal, kcal_sum)
 
     kcal_ratio = [
         ("protein", protein_percent),
+        ("fat", fat_percent),
         ("carbs", carbs_percent),
-        ("fat", fat_percent)
     ]
     kcal_ratio_rounded = map(lambda r: (r[0], round(r[1])), kcal_ratio)
     print_macro_ratio(kcal_ratio_rounded)
@@ -38,8 +39,11 @@ def calc_percent(nominator, denominator):
 
 
 def print_macro_ratio(elems):
+    print("\nEnergy ratio: ")
+    print("-----------------")
     for (kind, percent) in elems:
-        print("- Energy ratio: {k:.<7}{p:.>10} %".format(k=kind, p=percent))
+        print("- {k:<7}{p:>5} %".format(k=kind, p=percent))
+    print("")
 
 
 if __name__ == "__main__":
