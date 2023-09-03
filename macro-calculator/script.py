@@ -1,13 +1,20 @@
+import click
+
 KCAL_PER_GRAM_PROTEIN = 4
 KCAL_PER_GRAM_CARBS = 4
 KCAL_PER_GRAM_FAT = 9
 
-protein = 0
-carbs = 0
-fat = 0
+
+@click.group()
+def cli():
+    pass
 
 
-def count_energy_ratio(p, c, f):
+@cli.command()
+@click.option('-p', default=0, help='weight of protein in grams')
+@click.option('-f', default=0, help='weight of fat in grams')
+@click.option('-c', default=0, help='weight of carbs in grams')
+def energy_ratio(p, f, c):
     protein_kcal = p * KCAL_PER_GRAM_PROTEIN
     carbs_kcal = c * KCAL_PER_GRAM_CARBS
     fat_kcal = f * KCAL_PER_GRAM_FAT
@@ -17,12 +24,13 @@ def count_energy_ratio(p, c, f):
     carbs_percent = calc_percent(carbs_kcal, kcal_sum)
     fat_percent = calc_percent(fat_kcal, kcal_sum)
 
-    ratio = [
+    kcal_ratio = [
         ("protein", protein_percent),
         ("carbs", carbs_percent),
         ("fat", fat_percent)
     ]
-    return map(lambda r: (r[0], round(r[1])), ratio)
+    kcal_ratio_rounded = map(lambda r: (r[0], round(r[1])), kcal_ratio)
+    print_macro_ratio(kcal_ratio_rounded)
 
 
 def calc_percent(nominator, denominator):
@@ -35,4 +43,4 @@ def print_macro_ratio(elems):
 
 
 if __name__ == "__main__":
-    print_macro_ratio(count_energy_ratio(7, 6, 5))
+    cli()
