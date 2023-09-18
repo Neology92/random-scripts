@@ -1,4 +1,5 @@
 from random import randrange
+import sys
 
 
 def play():
@@ -23,4 +24,7 @@ def game_loop():
 
 
 if __name__ == "__main__":
-    play()
+    try:
+        play()
+    except KeyboardInterrupt:
+        sys.exit(0)
