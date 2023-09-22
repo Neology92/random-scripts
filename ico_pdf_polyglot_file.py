@@ -6,7 +6,8 @@ import struct
 
 ico_file = open("./test_data/favicon.ico", "rb")
 
-# First 6 bytes of the file are the ICONDIR structure:
+
+# 📖 First 6 bytes of the file are the ICONDIR structure:
 # (source: https://en.wikipedia.org/wiki/ICO_(file_format))
 #
 #   Offset  Size    Description
@@ -20,8 +21,10 @@ icondir_bytes = ico_file.read(6)
 img_count = struct.unpack("<HHH", icondir_bytes)[2]
 
 
-# Next 16 bytes are the ICONDIRENTRY structure:
+# 🚧 WIP...
+
+# 📖 Next 16 bytes are the ICONDIRENTRY structure:
 # (source: https://en.wikipedia.org/wiki/ICO_(file_format))
 
 
-# PDF things: https://web.archive.org/web/20141010035745/http://gnupdf.org/Introduction_to_PDF
+# 💡 PDF things: https://web.archive.org/web/20141010035745/http://gnupdf.org/Introduction_to_PDF
