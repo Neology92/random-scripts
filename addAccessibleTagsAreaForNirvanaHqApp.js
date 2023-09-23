@@ -1,3 +1,9 @@
+// 📘 Simple script modifying NirvanaHq (todo list app) sidebar
+// Adds tag filtering button for easier access to current sprint tasks
+
+// 💡 Fired with Page Manipulator extension for Google Chrome:
+// https://chrome.google.com/webstore/detail/page-manipulator/mdhellggnoabbnnchkeniomkpghbekko
+
 function insertAfter(newNode, existingNode) {
   existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
@@ -20,4 +26,4 @@ const addCurrentTagButton = () => {
   insertAfter(tagsCloudcopy, focusNode);
 };
 
-setTimeout(addCurrentTagButton, 1000);
+setTimeout(addCurrentTagButton, 500);
