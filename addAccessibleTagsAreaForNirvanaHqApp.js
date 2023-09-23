@@ -15,9 +15,9 @@ const addCurrentTagButton = () => {
     tagsCloudcopy.firstChild.removeChild(item);
   });
 
-  const inbox = document.querySelector(".inbox").parentElement;
+  const focusNode = document.querySelector(".focus");
 
-  insertAfter(tagsCloudcopy, inbox);
+  insertAfter(tagsCloudcopy, focusNode);
 };
 
 setTimeout(addCurrentTagButton, 1000);
