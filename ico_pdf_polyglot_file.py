@@ -2,6 +2,7 @@
 # and related PagedOut article: https://pagedout.institute/download/PagedOut_001_beta1.pdf (page 14)
 
 import struct
+import os
 
 
 ico_file = open("./test_data/favicon.ico", "rb")
@@ -33,4 +34,37 @@ img_offset = struct.unpack("<BBBBHHII", icondirentry_bytes)[-1]
 print(f"Image offset: {img_offset}")
 
 
+# Get PDF bytes untill the end of last object
 # 💡 PDF things: https://web.archive.org/web/20141010035745/http://gnupdf.org/Introduction_to_PDF
+# 📄 PDF spec: https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf
+pdf_file = open("./test_data/time-machine.pdf", "rb")
+
+# 1. get cross-reference table offset
+
+# Find %%EOF marker
+# Each character is exactly one byte
+
+eof_offset = 0
+for i in range(-4, -512, -1):
+    pdf_file.seek(i, os.SEEK_END)
+    tmp = pdf_file.read(5)
+    if (tmp == "%%EOF"):
+        eof_offset = tmp
+        break
+
+# Go back byte by byte and find the "startxref" marker
+pdf_file.seek(eof_offset, os.SEEK_SET)
+tmp = pdf_file.read(-10)  # Not like that ofc xD
+print(struct.unpack("<BBBBBBBBBB", tmp))
+
+
+# xref_table_offset = pdf_file.read(50)
+
+
+# xref_table_offset = pdf_file.read(50)
+# print(f"Cross-reference table offset: {xref_table_offset}")
+#
+# # 2. Get cross-reference table
+# pdf_file.seek(xref_table_offset, os.SEEK_SET)
+# for line in pdf_file:
+#     print(line)
