@@ -52,6 +52,9 @@ for i in range(-5, -512, -1):
         eof_offset = i
         break
 
+if eof_offset == 0:
+    raise Exception("No %%EOF marker found")
+
 # - Go back byte by byte and find the "startxref" marker
 
 xref_table_addr = 0
@@ -66,10 +69,17 @@ for i in range(min(eof_offset, -9), -128, -1):
         pdf_file.seek(xref_addr_offset, os.SEEK_END)
         xref_table_addr = int(pdf_file.read(xref_addr_length))
 
+if xref_table_addr == 0:
+    raise Exception("No startxref marker found")
+
 # 2. Get cross-reference table
 
 pdf_file.seek(xref_table_addr, os.SEEK_SET)
-for line in pdf_file:
+for i, line in enumerate(pdf_file):
+    if i == 0 and line != b"xref\n":
+        raise Exception(
+            "No xref keyword found on the first line of the cross-reference table at given address")
+
     print(line)
 
 
