@@ -84,7 +84,14 @@ for i, line in enumerate(pdf_file):
 
     print(line)
 
+# https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf#page=49
+# Get objects offsets and generation numbers
+# Get objects count
+# Get last object offset
 
-# pdf_file.seek(xref_table_offset, os.SEEK_SET)
-# for line in pdf_file:
-#     print(line)
+
+# 3. Write PDF bytes until last end_of_last_object_offset to the ICO file
+# 4. Write ICO bytes from img_offset to the end of the file
+# 5. Write PDF bytes from end_of_last_object_offset to the end of the file
+# 6. Fix ICO image offset in the ICONDIRENTRY structure
+# 7. Save new ico-pdf polyglot file
