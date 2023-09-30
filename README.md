@@ -30,8 +30,8 @@ _(might not be fully up to date with the files)_
 
 🚧 WIP 🚧
 
-This script takes an ico file and a pdf file and creates a polyglot</br>
-file that is both a valid ico and a valid pdf file.</br>
+This script takes an ico file and a pdf file and creates a polyglot
+file that is both a valid ico and a valid pdf file.
 Inspired with [PagedOut!#1 article by @tickelton](https://pagedout.institute/download/PagedOut_001_beta1.pdf#page=13)
 
 ```bash
@@ -40,9 +40,9 @@ TODO...
 
 ## binary_trainer.py
 
-This script gonna help you to train your binary encoding skills</br>
-in 0000 - 1111 range (0 - 15 in decimal). It's nice to be able</br>
-to convert small binary values to decimal and vice versa in your head.</br>
+This script gonna help you to train your binary encoding skills
+in 0000 - 1111 range (0 - 15 in decimal). It's nice to be able
+to convert small binary values to decimal and vice versa in your head.
 
 ```bash
 $ python binary_trainer.py
@@ -61,7 +61,7 @@ Your number with cleared bit:
 
 ## gen_bin_mask.py
 
-This script generates a binary mask with given number of bits,</br>
+This script generates a binary mask with given number of bits,
 shifted by given number of positions.
 
 ```bash
@@ -83,19 +83,19 @@ Your updated value is:
 
 ## addAccessibleTagsAreaForNirvanaHqApp.js
 
-Javascript snippet that adds an accessible "Current Sprint" tag filter </br>
-for the [NirvanaHQ](https://nirvanahq.com/) app.</br>
-Use with any browser extension that allows you to inject custom JS.</br>
+Javascript snippet that adds an accessible "Current Sprint" tag filter
+for the [NirvanaHQ](https://nirvanahq.com/) app.
+Use with any browser extension that allows you to inject custom JS.
 
 ## git-fill-1-day-gaps.py
 
 🚧 WIP 🚧
 
-Another script to fill a github activity log.</br>
-This one fills 1 day gaps (Including Mondays and Fridays gaps).</br>
-Like one wise saide once: </br>
-"Don't judge annyone by thier github activity log.</br>
-It's not a good measure of productivity."</br>
+Another script to fill a github activity log.
+This one fills 1 day gaps (Including Mondays and Fridays gaps).
+Like one wise saide once:
+"Don't judge annyone by thier github activity log.
+It's not a good measure of productivity."
 
 ```bash
 TODO...
@@ -103,12 +103,12 @@ TODO...
 
 ## macro_calculator.py
 
-This script takes protein, fat and carbs values in grams</br>
-and calculates what's their energy ratio. </br>
+This script takes protein, fat and carbs values in grams
+and calculates what's their energy ratio.
 
-Why this weird way of calling it? </br>
-Probably it meant to have more functions. </br>
-But it doesn't. </br>
+Why this weird way of calling it?
+Probably it meant to have more functions.
+But it doesn't.
 
 ```bash
 $ python macro_calculator.py energy-ratio 100 50 200
