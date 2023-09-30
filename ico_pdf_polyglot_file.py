@@ -41,30 +41,38 @@ pdf_file = open("./test_data/time-machine.pdf", "rb")
 
 # 1. get cross-reference table offset
 
-# Find %%EOF marker
-# Each character is exactly one byte
+# - Find %%EOF marker
+# - Each character is exactly one byte
 
 eof_offset = 0
-for i in range(-4, -512, -1):
+for i in range(-5, -512, -1):
     pdf_file.seek(i, os.SEEK_END)
     tmp = pdf_file.read(5)
-    if (tmp == "%%EOF"):
-        eof_offset = tmp
+    if (tmp == b"%%EOF"):
+        eof_offset = i
         break
 
-# Go back byte by byte and find the "startxref" marker
-pdf_file.seek(eof_offset, os.SEEK_SET)
-tmp = pdf_file.read(-10)  # Not like that ofc xD
-print(struct.unpack("<BBBBBBBBBB", tmp))
+# - Go back byte by byte and find the "startxref" marker
+
+xref_table_addr = 0
+for i in range(min(eof_offset, -9), -128, -1):
+    pdf_file.seek(i, os.SEEK_END)
+    tmp = pdf_file.read(9)
+    if (tmp == b"startxref"):
+        # Take into account 1 byte \n character at the beginning and the end
+        xref_addr_offset = i + 9 + 1
+        xref_addr_length = (eof_offset - xref_addr_offset - 1)
+
+        pdf_file.seek(xref_addr_offset, os.SEEK_END)
+        xref_table_addr = int(pdf_file.read(xref_addr_length))
+
+# 2. Get cross-reference table
+
+pdf_file.seek(xref_table_addr, os.SEEK_SET)
+for line in pdf_file:
+    print(line)
 
 
-# xref_table_offset = pdf_file.read(50)
-
-
-# xref_table_offset = pdf_file.read(50)
-# print(f"Cross-reference table offset: {xref_table_offset}")
-#
-# # 2. Get cross-reference table
 # pdf_file.seek(xref_table_offset, os.SEEK_SET)
 # for line in pdf_file:
 #     print(line)
