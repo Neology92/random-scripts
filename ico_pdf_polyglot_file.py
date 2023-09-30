@@ -77,8 +77,10 @@ if xref_table_addr == 0:
 pdf_file.seek(xref_table_addr, os.SEEK_SET)
 for i, line in enumerate(pdf_file):
     if i == 0 and line != b"xref\n":
-        raise Exception(
-            "No xref keyword found on the first line of the cross-reference table at given address")
+        # Note: This might happend if the PDF file uses cross-reference stream, which were introduced in PDF 1.5
+        # This script does not support them to keep it simple (Most PDF files are using cross-reference tables, anyway)
+        # See: https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf#page=57
+        raise Exception("No xref keyword found on the x-ref table address")
 
     print(line)
 
