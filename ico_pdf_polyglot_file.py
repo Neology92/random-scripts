@@ -74,6 +74,8 @@ if xref_table_addr == 0:
 
 # 2. Get cross-reference table
 
+xref_table = []
+last_id = -1
 pdf_file.seek(xref_table_addr, os.SEEK_SET)
 for i, line in enumerate(pdf_file):
     if i == 0 and line != b"xref\n":
@@ -82,13 +84,35 @@ for i, line in enumerate(pdf_file):
         # See: https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf#page=57
         raise Exception("No xref keyword found on the x-ref table address")
 
-    print(line)
+    if i == 1:
+        # Find last object id
+        vals_str = line.decode().rstrip().split(" ")
+        [first_id, objects_count] = [int(i) for i in vals_str]
+
+        # print([first_id, objects_count])
+        last_id = first_id + objects_count
+        break
+
+# 3. Get end of the last object before xref table
+
+last_obj_end_offset = -1
+for i in range(xref_table_addr, xref_table_addr - 10, -1):
+    pdf_file.seek(i, os.SEEK_SET)
+    if pdf_file.read(6) == b'endobj':
+        last_obj_end_offset = pdf_file.tell()
+
+print(f"Last object end offset: {last_obj_end_offset}")
+
+
+# 4. Write this into the new polyglot file
+
+# 5. Create ico data obj and write into the new polyglot file
+
+# 6. Write rest of the PDF input into the new polyglot file
+
+# 7. Adjust some values - to find out which
 
 # https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf#page=49
-# Get objects offsets and generation numbers
-# Get objects count
-# Get last object offset
-
 
 # 3. Write PDF bytes until last end_of_last_object_offset to the ICO file
 # 4. Write ICO bytes from img_offset to the end of the file
