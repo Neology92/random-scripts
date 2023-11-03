@@ -1,3 +1,5 @@
+const emailAddress = "oskarlegner@gmail.com";
+
 function triggerOnLastMondayOfTheMonth() {
   if (isLastMondayOfTheMonth()) {
     console.log("Hell yeah! Today is the last Monday of the month!");
@@ -60,6 +62,15 @@ function updateFWNincome(sheet) {
   console.log("TODO FWN");
 }
 
+function sendInfoEmail(sheetUrl, email) {
+  const subject = "[Home Budget] New budget sheet created!";
+  const body = `New budget sheet has been created!
+You can find it here: ${sheetUrl}
+
+  Cheers!`;
+  GmailApp.sendEmail(email, subject, body);
+}
+
 function createBudgetSheet() {
   const prevMonth = shiftedDate(-7).getMonth();
   const nextMonth = shiftedDate(7).getMonth();
@@ -96,4 +107,5 @@ function createBudgetSheet() {
 
   clearBudgetEntries(newSheet);
   updateFWNincome(newSheet);
+  sendInfoEmail(newSheetUrl, emailAddress);
 }
