@@ -59,21 +59,21 @@ function clearEntryLabelAndValue(startRange, row, col) {
   startRange.offset(row, col + 1).clearContent(); // value
 }
 
-function clearBudgetExpensesEntries(spreadsheet) {
-  var tabName = "Wydatki";
-  var startCell = "M8";
-  var untouchableEntries = ["planned"];
+function clearExpensesEntries(spreadsheet) {
+  const tabName = "Wydatki";
+  const startCell = "M8";
+  const untouchableEntries = ["planned"];
 
   // Choose tab
-  var sheet = spreadsheet.getSheetByName(tabName);
+  const sheet = spreadsheet.getSheetByName(tabName);
 
-  // Select
-  var startRange = sheet.getRange(startCell);
-  var lastRow = sheet.getLastRow();
-  var lastCol = sheet.getLastColumn();
+  // Select starting cell
+  const startRange = sheet.getRange(startCell);
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
 
   // Get the data in the range
-  var data = sheet
+  const data = sheet
     .getRange(startRange.getRow(), startRange.getColumn(), lastRow, lastCol)
     .getValues();
 
@@ -84,6 +84,40 @@ function clearBudgetExpensesEntries(spreadsheet) {
       clearEntryLabelAndValue(startRange, row, col);
     }
   }
+}
+
+function isFormula(cell) {
+  return cell.getFormula() !== "";
+}
+
+function clearPlannedExpenses(spreadsheet) {
+  const tabName = "Wydatki";
+  const startCell = "F8";
+
+  const sheet = spreadsheet.getSheetByName(tabName);
+
+  // Select starting cell
+  const startRange = sheet.getRange(startCell);
+  const lastRow = sheet.getLastRow();
+
+  // Get the data in the range
+  const data = sheet
+    .getRange(startRange.getRow(), startRange.getColumn(), lastRow)
+    .getValues();
+
+  data.forEach((row, rowIndex) => {
+    const currentCell = startRange.offset(rowIndex, 0);
+
+    // If value is formula or label, skip
+    if (isFormula(currentCell)) return;
+    if (typeof currentCell.getValue() !== "number") return;
+
+    // Copy default planned expenses
+    // desc: Default values are in column E, next to each cleared entry
+    //      If there is no default value, entry is cleared
+    const defaultValueCell = startRange.offset(rowIndex, -1);
+    defaultValueCell.copyTo(currentCell, { contentsOnly: true });
+  });
 }
 
 function updateFWNincome(sheet) {
@@ -137,7 +171,7 @@ function createBudgetSheet() {
     "https://docs.google.com/spreadsheets/d/" + newSpreadsheetId;
 
   const openSpreadsheet = SpreadsheetApp.openById(newSpreadsheetId);
-  clearBudgetExpensesEntries(openSpreadsheet);
+  clearExpensesEntries(openSpreadsheet);
   updateFWNincome(openSpreadsheet);
 
   sendInfoEmail(newSpreadsheetUrl, emailAddress);
