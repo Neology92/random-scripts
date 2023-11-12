@@ -29,12 +29,12 @@ function shiftedDate(days) {
   return new Date(today.getTime() + days * 24 * 60 * 60 * 1000);
 }
 
-function moveSheetToFolder(sheet, folder) {
-  const file = DriveApp.getFileById(sheet.getId());
+function moveSpreadsheetToFolder(spreadsheet, folder) {
+  const file = DriveApp.getFileById(spreadsheet.getId());
   file.moveTo(folder);
 }
 
-function getSheetNameByMonthName(monthNo) {
+function getSpreadsheetNameByMonthName(monthNo) {
   const polishMonths = [
     "styczeń",
     "luty",
@@ -54,8 +54,7 @@ function getSheetNameByMonthName(monthNo) {
   return `${monthNo + 1}-${monthName}-Budzet-domowy`;
 }
 
-function clearBudgetEntries(sheet) {
-  console.log("TODO Budget clean");
+function clearBudgetExpensesEntries(spreadsheet) {
 }
 
 function updateFWNincome(sheet) {
@@ -80,18 +79,20 @@ function createBudgetSheet() {
   const folderName = "Budżet domowy";
   const folder = DriveApp.getFoldersByName(folderName).next();
 
-  // Get previous month's sheet
+  // Get previous month's Spreadsheet
   const prevYearSubfolderName = prevYear.toString();
   const prevYearSubfolder = folder
     .getFoldersByName(prevYearSubfolderName)
     .next();
-  const prevSheetName = getSheetNameByMonthName(prevMonth);
-  const prevSheet = prevYearSubfolder.getFilesByName(prevSheetName).next();
+  const prevSpreadsheetName = getSpreadsheetNameByMonthName(prevMonth);
+  const prevSpreadsheet = prevYearSubfolder
+    .getFilesByName(prevSpreadsheetName)
+    .next();
 
-  // Create a new sheet based on the previous month's sheet
-  const nextSheetName = getSheetNameByMonthName(nextMonth);
-  const newSheet = SpreadsheetApp.openById(prevSheet.getId()).copy(
-    `test-${nextSheetName}`
+  // Create a new Spreadsheet based on the previous month's Spreadsheet
+  const nextSpreadsheetName = getSpreadsheetNameByMonthName(nextMonth);
+  const newSpreadsheet = SpreadsheetApp.openById(prevSpreadsheet.getId()).copy(
+    `test-${nextSpreadsheetName}`
   );
 
   const nextYearSubfolderName = nextYear.toString();
@@ -99,13 +100,16 @@ function createBudgetSheet() {
     .getFoldersByName(nextYearSubfolderName)
     .next();
 
-  moveSheetToFolder(newSheet, nextYearSubfolder);
+  moveSpreadsheetToFolder(newSpreadsheet, nextYearSubfolder);
 
-  // Open the new sheet
-  const newSheetId = newSheet.getId();
-  const newSheetUrl = "https://docs.google.com/spreadsheets/d/" + newSheetId;
+  // Open the new Spreadsheet
+  const newSpreadsheetId = newSpreadsheet.getId();
+  const newSpreadsheetUrl =
+    "https://docs.google.com/spreadsheets/d/" + newSpreadsheetId;
 
-  clearBudgetEntries(newSheet);
-  updateFWNincome(newSheet);
-  sendInfoEmail(newSheetUrl, emailAddress);
+  const openSpreadsheet = SpreadsheetApp.openById(newSpreadsheetId);
+  clearBudgetExpensesEntries(openSpreadsheet);
+  updateFWNincome(openSpreadsheet);
+
+  sendInfoEmail(newSpreadsheetUrl, emailAddress);
 }
