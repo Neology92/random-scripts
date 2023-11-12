@@ -54,7 +54,36 @@ function getSpreadsheetNameByMonthName(monthNo) {
   return `${monthNo + 1}-${monthName}-Budzet-domowy`;
 }
 
+function clearEntryLabelAndValue(startRange, row, col) {
+  startRange.offset(row, col).clearContent(); // label
+  startRange.offset(row, col + 1).clearContent(); // value
+}
+
 function clearBudgetExpensesEntries(spreadsheet) {
+  var tabName = "Wydatki";
+  var startCell = "M8";
+  var untouchableEntries = ["planned"];
+
+  // Choose tab
+  var sheet = spreadsheet.getSheetByName(tabName);
+
+  // Select
+  var startRange = sheet.getRange(startCell);
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+
+  // Get the data in the range
+  var data = sheet
+    .getRange(startRange.getRow(), startRange.getColumn(), lastRow, lastCol)
+    .getValues();
+
+  for (let row = 0; row < data.length; row += 1) {
+    for (let col = 0; col < data[row].length; col += 2) {
+      const label = data[row][col];
+      if (untouchableEntries.includes(label)) continue;
+      clearEntryLabelAndValue(startRange, row, col);
+    }
+  }
 }
 
 function updateFWNincome(sheet) {
