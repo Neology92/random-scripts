@@ -108,15 +108,19 @@ function clearPlannedExpenses(spreadsheet) {
   data.forEach((row, rowIndex) => {
     const currentCell = startRange.offset(rowIndex, 0);
 
-    // If value is formula or label, skip
+    // If value is formula, skip
     if (isFormula(currentCell)) return;
-    if (typeof currentCell.getValue() !== "number") return;
+
+    if (typeof currentCell.getValue() === "number") {
+      // Clear entries
+      currentCell.clearContent();
+    }
 
     // Copy default planned expenses
     // desc: Default values are in column E, next to each cleared entry
-    //      If there is no default value, entry is cleared
     const defaultValueCell = startRange.offset(rowIndex, -1);
-    defaultValueCell.copyTo(currentCell, { contentsOnly: true });
+    if (defaultValueCell.getValue())
+      defaultValueCell.copyTo(currentCell, { contentsOnly: true });
   });
 }
 
