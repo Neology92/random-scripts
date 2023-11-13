@@ -26,11 +26,14 @@ if [ "$1" == "-s" ]; then
     shift # Remove the suffix from the list
 fi
 
+# Get the extension of the input file
+input_extension="${input_file##*.}"
+
 # Loop through the remaining arguments and create files with the input extension and suffix
 for output_file in "$@"; do
-    # Use the input extension and suffix for the output files
-    echo "$(cat "$input_file")" > "$output_file$suffix"
-    echo "Created file: $output_file$suffix"
+    # Use the input extension for the output files
+    echo "$(cat "$input_file")" > "$output_file$suffix.$input_extension"
+    echo "Created file: $output_file$suffix.$input_extension"
 done
 
 echo "Script completed successfully."
