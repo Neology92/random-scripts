@@ -2,7 +2,7 @@
 
 # Check if at least one argument is provided
 if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <input_file>"
+    echo "Usage: $0 <input_file> [-s <suffix>] <output_file1> [<output_file2> ...]"
     exit 1
 fi
 
@@ -16,14 +16,21 @@ if [ ! -e "$input_file" ]; then
     exit 1
 fi
 
-# Get the extension of the input file
-input_extension="${input_file##*.}"
+suffix="" # Default suffix is an empty string
 
-# Loop through the remaining arguments and create files with the input extension
+# Check if the next argument is the suffix option
+if [ "$1" == "-s" ]; then
+    # Shift to the next argument to get the suffix
+    shift
+    suffix="$1"
+    shift # Remove the suffix from the list
+fi
+
+# Loop through the remaining arguments and create files with the input extension and suffix
 for output_file in "$@"; do
-    # Use the input extension for the output files
-    echo "$(cat "$input_file")" > "$output_file.$input_extension"
-    echo "Created file: $output_file.$input_extension"
+    # Use the input extension and suffix for the output files
+    echo "$(cat "$input_file")" > "$output_file$suffix"
+    echo "Created file: $output_file$suffix"
 done
 
 echo "Script completed successfully."
